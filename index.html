@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>FIELD SYNTH — FLUID</title>
+<title>OP-FLUID SYNTH</title>
 <style>
 :root{
   --alu:#c9c7c2;
@@ -1225,10 +1225,8 @@ function updateLeds(){
     l.classList.toggle("rec",i===bar&&recording);
   });
 }
-updateBarLabel();
-setOct(octave);
-
 /* ---------- persistence: cookies first, localStorage fallback, all fail-safe ---------- */
+/* declared before the boot calls below, since setOct()/setBPM() etc. call queueSave() immediately */
 const ENGINES=["crystal","tape","bloom","pluck","fm"];
 const rnd=(n,p)=>Math.round(n*p)/p;
 let saveTimer=null;
@@ -1292,8 +1290,10 @@ function loadState(){
     }
   }catch(_){}
 }
+/* boot: labels first, then restore any saved state, then start the render loop */
+updateBarLabel();
+setOct(octave);
 loadState();
-
 tick();
 </script>
 </body>
