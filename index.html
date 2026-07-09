@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>OP / FLUID</title>
+<meta name="theme-color" id="metaTheme" content="#b9b7b2">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0d0b'/%3E%3Cg fill='%233ce08f'%3E%3Crect x='29' y='29' width='6' height='6'/%3E%3Crect x='21' y='29' width='4' height='4' opacity='.7'/%3E%3Crect x='39' y='29' width='4' height='4' opacity='.7'/%3E%3Crect x='29' y='21' width='4' height='4' opacity='.7'/%3E%3Crect x='29' y='39' width='4' height='4' opacity='.7'/%3E%3Crect x='15' y='29' width='3' height='3' opacity='.4'/%3E%3Crect x='46' y='29' width='3' height='3' opacity='.4'/%3E%3Crect x='29' y='15' width='3' height='3' opacity='.4'/%3E%3Crect x='29' y='46' width='3' height='3' opacity='.4'/%3E%3Crect x='21' y='21' width='3' height='3' opacity='.5'/%3E%3Crect x='40' y='21' width='3' height='3' opacity='.5'/%3E%3Crect x='21' y='40' width='3' height='3' opacity='.5'/%3E%3Crect x='40' y='40' width='3' height='3' opacity='.5'/%3E%3C/g%3E%3C/svg%3E">
 <style>
 :root{
@@ -67,16 +68,16 @@ body.dark{
   --readout-txt:#f2f2f2;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%}
+html{height:100%}
+body{min-height:100%}
 body{
   background:#b9b7b2;
   background-image:
     radial-gradient(ellipse 120% 80% at 50% -10%, #d3d1cc 0%, transparent 60%),
     repeating-linear-gradient(0deg, rgba(0,0,0,.015) 0 1px, transparent 1px 3px);
-  display:flex;align-items:center;justify-content:center;
+  display:flex;
   font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
   padding:18px;
-  min-height:100%;
   color:var(--ink);
   transition:background .3s;
 }
@@ -88,7 +89,8 @@ body.dark{
 }
 .mono{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace}
 
-.rig{width:min(580px,100%)}
+.rig{width:min(580px,100%);margin:auto}
+button,select,input{touch-action:manipulation}
 
 /* ============ CHASSIS (shared by device + modules) ============ */
 .device,.module{
@@ -435,8 +437,8 @@ select.readout:focus-visible{box-shadow:inset 0 1px 4px rgba(0,0,0,.8), 0 0 0 2p
     0 1px 1px rgba(0,0,0,.18),
     inset 0 1px 1px var(--rim),
     inset 0 -2px 2px rgba(0,0,0,.06);
-  padding:14px 2px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:14px 2px 9px;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
 
   cursor:pointer;
   font-family:inherit;
@@ -493,9 +495,10 @@ body.dark .tkey.play.on svg path{fill:#fff;stroke:#fff}
 
 .rig-brand{
   text-align:center;
-  margin-bottom:14px;
-  font-size:12px;letter-spacing:.28em;color:var(--ink);font-weight:600;text-transform:uppercase;
+  margin-bottom:38px;
+  font-size:12px;letter-spacing:.28em;color:#1a1a18;font-weight:600;text-transform:uppercase;
 }
+body.dark .rig-brand{color:#f5f5f5}
 
 .under-hint{
   text-align:center;
@@ -508,19 +511,39 @@ body.dark .under-hint{color:#6a6a6a}
   text-align:center;margin-top:8px;
   font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
   font-family:ui-monospace,"SF Mono",Menlo,monospace;
+  color:#8f8d88;
 }
+body.dark .byline{color:#6a6a6a}
 .byline a{color:#8f8d88;text-decoration:none;border-bottom:1px solid rgba(143,141,136,.35);padding-bottom:1px;transition:color .15s,border-color .15s}
 .byline a:hover,.byline a:focus-visible{color:var(--ink);border-color:var(--ink);outline:none}
 body.dark .byline a{color:#6a6a6a;border-color:rgba(106,106,106,.4)}
 body.dark .byline a:hover,body.dark .byline a:focus-visible{color:var(--ink);border-color:var(--ink)}
 
 @media (max-width:520px){
-  .top-row{grid-template-columns:56px 1fr 48px}
+  body{padding:12px}
+  .device{padding:10px;border-radius:18px}
+  .device::after{border-radius:18px}
+  .top-row{grid-template-columns:52px 1fr 44px;gap:8px;margin-bottom:10px}
+  .vu i{width:20px}
+  .knob-row{gap:4px;padding:8px 6px;margin-bottom:10px}
   .knob{width:46px;height:46px}
-  .footer .hint{display:none}
+  .knob .cap{width:20px;height:20px}
+  .knob-cell{padding:6px 0;gap:4px}
+  .knob-cell .lbl{font-size:8px;letter-spacing:.12em}
   .screen{aspect-ratio:16/9}
+  .util-row{gap:6px;margin-bottom:6px}
+  .util-panel{padding:6px 6px;gap:5px}
+  .pill{padding:7px 9px;letter-spacing:.12em}
+  .step-btn{width:36px;height:36px}
+  input.readout{font-size:16px;width:62px;padding:4px 4px}   /* ≥16px prevents iOS focus zoom */
+  select.readout{font-size:13px;padding:5px 22px 5px 5px;background-position:right 7px center}
+  .bottom-row{grid-template-columns:1fr;gap:10px}
   .engine-bank{grid-template-columns:repeat(5,1fr);gap:5px}
-  .module-row{grid-template-columns:1fr;gap:26px}
+  .transport{padding:10px 8px 22px}
+  .tkey{max-width:48px}
+  .module-row{grid-template-columns:1fr;gap:28px;margin-top:20px}
+  .module .knob{width:48px;height:48px}
+  .rig-brand{margin-bottom:26px}
 }
 @media (prefers-reduced-motion:reduce){
   .tkey.rec.armed .dot{animation:none}
@@ -697,6 +720,8 @@ body.dark .byline a:hover,body.dark .byline a:focus-visible{color:var(--ink);bor
       <select class="readout tiny" id="lfoDestSel" aria-label="lfo destination">
         <option value="filter">FILTER</option>
         <option value="level">LEVEL</option>
+        <option value="crush">CRUSH</option>
+        <option value="harmonic">HARMONIC</option>
       </select>
       <button class="pill mod-power" id="lfoPower" aria-pressed="false"><span class="led"></span>ON</button>
     </div>
@@ -710,6 +735,48 @@ body.dark .byline a:hover,body.dark .byline a:focus-visible{color:var(--ink);bor
       <div class="knob-cell">
         <span class="lbl">DEPTH</span>
         <div class="knob" data-color="mgrey2" data-mod="depth" role="slider" aria-label="lfo depth" aria-valuemin="0" aria-valuemax="100" tabindex="0"><div class="cap"></div><div class="rot"><div class="dot"></div></div></div>
+        <span class="val mono"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="module" id="harmModule">
+    <span class="tab l"></span><span class="tab r"></span>
+    <div class="mod-head">
+      <span class="mod-title">HARMONIC</span>
+      <button class="pill mod-power" id="harmPower" aria-pressed="false"><span class="led"></span>ON</button>
+    </div>
+    <div class="mod-screen"><div class="inner"><canvas id="harmCv"></canvas></div></div>
+    <div class="mod-knobs">
+      <div class="knob-cell">
+        <span class="lbl">BLEND</span>
+        <div class="knob" data-color="mgrey1" data-mod="blend" role="slider" aria-label="harmonic blend" aria-valuemin="0" aria-valuemax="100" tabindex="0"><div class="cap"></div><div class="rot"><div class="dot"></div></div></div>
+        <span class="val mono"></span>
+      </div>
+      <div class="knob-cell">
+        <span class="lbl">VOICES</span>
+        <div class="knob" data-color="mgrey2" data-mod="spread" role="slider" aria-label="harmonic voices" aria-valuemin="1" aria-valuemax="3" tabindex="0"><div class="cap"></div><div class="rot"><div class="dot"></div></div></div>
+        <span class="val mono"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="module" id="crushModule">
+    <span class="tab l"></span><span class="tab r"></span>
+    <div class="mod-head">
+      <span class="mod-title">CRUSH</span>
+      <button class="pill mod-power" id="crushPower" aria-pressed="false"><span class="led"></span>ON</button>
+    </div>
+    <div class="mod-screen"><div class="inner"><canvas id="crushCv"></canvas></div></div>
+    <div class="mod-knobs">
+      <div class="knob-cell">
+        <span class="lbl">BITS</span>
+        <div class="knob" data-color="mgrey1" data-mod="bits" role="slider" aria-label="bit depth" aria-valuemin="2" aria-valuemax="12" tabindex="0"><div class="cap"></div><div class="rot"><div class="dot"></div></div></div>
+        <span class="val mono"></span>
+      </div>
+      <div class="knob-cell">
+        <span class="lbl">MIX</span>
+        <div class="knob" data-color="mgrey2" data-mod="mix" role="slider" aria-label="crush mix" aria-valuemin="0" aria-valuemax="100" tabindex="0"><div class="cap"></div><div class="rot"><div class="dot"></div></div></div>
         <span class="val mono"></span>
       </div>
     </div>
@@ -729,21 +796,23 @@ body.dark .byline a:hover,body.dark .byline a:focus-visible{color:var(--ink);bor
 
 /* ---------- params ---------- */
 const P = { tone:.62, space:.45, drift:.42, orbs:.3, level:.7 };
-const PM = { hp:.1, lp:.9, rate:.35, depth:.5 };  // module params
-let filterOn=true, lfoOn=false, lfoDest="filter";
+const PM = { hp:.1, lp:.9, rate:.35, depth:.5, blend:.5, spread:.5, bits:.65, mix:.4 };  // module params
+let filterOn=true, lfoOn=false, lfoDest="filter", harmOn=false, crushOn=false;
+let lfoPhase=0;
 let engine="crystal";
 
 let BPM=112;
 const BARS=8,BEATS=BARS*4;
 let LOOP_LEN=BEATS*60/BPM;
 
-const ORB_MIN=1,ORB_MAX=6;
+const ORB_MIN=1,ORB_MAX=6,ORB_SPEED=.17;
 const orbCount=()=>ORB_MIN+Math.round(P.orbs*(ORB_MAX-ORB_MIN));
 
 /* module value mappings */
 const hpHz=()=>20*Math.pow(100,PM.hp);          // 20 Hz .. 2 kHz
 const lpHz=()=>200*Math.pow(90,PM.lp);          // 200 Hz .. 18 kHz
 const lfoHz=()=>.05*Math.pow(240,PM.rate);      // .05 .. 12 Hz
+const crushBits=()=>2+Math.round(PM.bits*10);   // 2 .. 12 bits
 
 /* ---------- key signature / octave ---------- */
 const NOTE_NAMES=["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
@@ -759,9 +828,41 @@ function quantizePitch(t){
 }
 const mtof=m=>440*Math.pow(2,(m-69)/12);
 
+/* walk N scale tones upward from a midi note — always lands in key */
+function scaleTone(midi,steps){
+  const pcs=SCALES[keyMode].map(x=>(x+keyRoot)%12);
+  let m=midi,count=0;
+  while(count<steps&&m<115){m++;if(pcs.includes(((m%12)+12)%12))count++;}
+  return m;
+}
+/* LFO->HARMONIC swell multiplier. phase in radians (live: lfoPhase, export: from time) */
+function harmMul(phase){
+  if(!lfoOn||lfoDest!=="harmonic")return 1;
+  const s=.5+.5*Math.sin(phase);
+  return 1-PM.depth+PM.depth*s; /* depth 0 -> steady, depth 1 -> full swell */
+}
+/* [midi, gainMultiplier] pairs for the HARMONIC module */
+function harmonyList(midi,phase){
+  if(!harmOn||PM.blend<=0.01)return [];
+  const mul=harmMul(phase);
+  if(mul<=0.02)return [];
+  const n=1+Math.round(PM.spread*2); /* 1..3 voices */
+  const steps=[3,5,8].slice(0,n);   /* ~fifth, octave, octave+ in scale steps */
+  const gains=[.5,.35,.25];
+  return steps.map((st,i)=>[scaleTone(midi,st),PM.blend*gains[i]*mul]);
+}
+
 /* ================================================================
    AUDIO — chain builder shared by live context and offline render
 ================================================================ */
+function crushCurve(bits){
+  const n=2048,curve=new Float32Array(n),L=Math.pow(2,bits-1);
+  for(let i=0;i<n;i++){
+    const x=i/(n-1)*2-1;
+    curve[i]=Math.round(x*L)/L;
+  }
+  return curve;
+}
 function makeChain(ctx){
   const c={};
   c.master=ctx.createGain();c.master.gain.value=P.level*.9;
@@ -794,11 +895,27 @@ function makeChain(ctx){
   c.lpF.frequency.value=filterOn?lpHz():21000;
   c.trem=ctx.createGain();c.trem.gain.value=1;
 
+  /* CRUSH module: parallel bit-quantizing waveshaper */
+  c.crushIn=ctx.createGain();
+  c.crushDry=ctx.createGain();
+  c.crushWet=ctx.createGain();
+  c.shaper=ctx.createWaveShaper();
+  c.shaper.curve=crushCurve(crushBits());
+  c.crushIn.connect(c.crushDry);
+  c.crushIn.connect(c.shaper);c.shaper.connect(c.crushWet);
+  const cm=crushOn?PM.mix:0;
+  c.crushWet.gain.value=cm;c.crushDry.gain.value=1-cm;
+  c.crushOut=ctx.createGain();
+  c.crushDry.connect(c.crushOut);c.crushWet.connect(c.crushOut);
+
   c.lfo=ctx.createOscillator();c.lfo.type="sine";c.lfo.frequency.value=lfoHz();
   c.lfoGain=ctx.createGain();
   c.lfo.connect(c.lfoGain);
-  if(lfoDest==="filter"){c.lfoGain.connect(c.lpF.frequency);c.lfoGain.gain.value=lfoOn?PM.depth*4000:0;}
-  else{c.lfoGain.connect(c.trem.gain);c.lfoGain.gain.value=lfoOn?PM.depth*.45:0;}
+  const lg=lfoOn?PM.depth:0;
+  if(lfoDest==="filter"){c.lfoGain.connect(c.lpF.frequency);c.lfoGain.gain.value=lg*4000;}
+  else if(lfoDest==="level"){c.lfoGain.connect(c.trem.gain);c.lfoGain.gain.value=lg*.45;}
+  else if(lfoDest==="crush"){c.lfoGain.connect(c.crushWet.gain);c.lfoGain.gain.value=lg*.4;}
+  /* "harmonic" modulates note spawning in JS — no audio-rate connection */
   c.lfo.start();
 
   const bus=ctx.createGain();
@@ -806,7 +923,8 @@ function makeChain(ctx){
   c.delay.connect(c.wet);
   c.dry.connect(c.verb);c.verb.connect(c.wet);
   c.wet.connect(bus);
-  bus.connect(c.hpF);c.hpF.connect(c.lpF);c.lpF.connect(c.trem);c.trem.connect(c.comp);c.comp.connect(c.master);
+  bus.connect(c.hpF);c.hpF.connect(c.lpF);c.lpF.connect(c.trem);
+  c.trem.connect(c.crushIn);c.crushOut.connect(c.comp);c.comp.connect(c.master);
 
   c.voiceIn=ctx.createGain();c.voiceIn.connect(c.dry);c.voiceIn.connect(c.delaySend);
   return c;
@@ -903,26 +1021,38 @@ function applyModules(){
   CH.lpF.frequency.setTargetAtTime(filterOn?lpHz():21000,now,.03);
   CH.lfo.frequency.setTargetAtTime(lfoHz(),now,.03);
   const d=lfoOn?PM.depth:0;
-  CH.lfoGain.gain.setTargetAtTime(lfoDest==="filter"?d*4000:d*.45,now,.05);
+  const lgv=lfoDest==="filter"?d*4000:lfoDest==="level"?d*.45:lfoDest==="crush"?d*.4:0;
+  CH.lfoGain.gain.setTargetAtTime(lgv,now,.05);
+  CH.shaper.curve=crushCurve(crushBits());
+  const cm=crushOn?PM.mix:0;
+  CH.crushWet.gain.setTargetAtTime(cm,now,.03);
+  CH.crushDry.gain.setTargetAtTime(1-cm,now,.03);
 }
 function setLfoDest(dest){
   lfoDest=dest;
   if(CH){
     try{CH.lfoGain.disconnect();}catch(_){}
     if(dest==="filter")CH.lfoGain.connect(CH.lpF.frequency);
-    else CH.lfoGain.connect(CH.trem.gain);
+    else if(dest==="level")CH.lfoGain.connect(CH.trem.gain);
+    else if(dest==="crush")CH.lfoGain.connect(CH.crushWet.gain);
+    /* harmonic: handled per-note in harmonyList */
   }
   applyModules();
 }
 
-const MAXV=14;let liveVoices=0;
-function playNote(midi,vel=.8,when=0){
-  if(!AC||liveVoices>=MAXV)return;
+const MAXV=20;let liveVoices=0;
+function spawnLive(midi,vel,t){
+  if(liveVoices>=MAXV)return;
   liveVoices++;
-  const t=(when||AC.currentTime)+.001;
   spawnVoice(AC,CH.voiceIn,engine,midi,vel,t,P.tone,(out,end)=>{
     setTimeout(()=>{out.disconnect();liveVoices--;},(end-AC.currentTime)*1000+120);
   });
+}
+function playNote(midi,vel=.8,when=0){
+  if(!AC)return;
+  const t=(when||AC.currentTime)+.001;
+  spawnLive(midi,vel,t);
+  for(const [hm,g] of harmonyList(midi,lfoPhase))spawnLive(hm,vel*g,t+.004);
 }
 
 /* ---------- transport / looper ---------- */
@@ -1076,7 +1206,10 @@ async function exportWAV(){
     const chain=makeChain(octx);
     chain.master.connect(octx.destination);
     for(const ev of events){
-      spawnVoice(octx,chain.voiceIn,ev.engine,quantizePitch(ev.t),ev.vel,ev.off+.02,P.tone,null);
+      const midi=quantizePitch(ev.t);
+      spawnVoice(octx,chain.voiceIn,ev.engine,midi,ev.vel,ev.off+.02,P.tone,null);
+      for(const [hm,g] of harmonyList(midi,ev.off*lfoHz()*Math.PI*2))
+        spawnVoice(octx,chain.voiceIn,ev.engine,hm,ev.vel*g,ev.off+.024,P.tone,null);
     }
     const buf=await octx.startRendering();
     /* encode WAV */
@@ -1225,7 +1358,11 @@ const modFmt={
   hp:()=>{const f=hpHz();return f>=1000?(f/1000).toFixed(1)+"K":Math.round(f)+"";},
   lp:()=>{const f=lpHz();return f>=1000?(f/1000).toFixed(1)+"K":Math.round(f)+"";},
   rate:()=>lfoHz().toFixed(2),
-  depth:()=>fmt(PM.depth)
+  depth:()=>fmt(PM.depth),
+  blend:()=>fmt(PM.blend),
+  spread:()=>"×"+(1+Math.round(PM.spread*2)),
+  bits:()=>String(crushBits()),
+  mix:()=>fmt(PM.mix)
 };
 document.querySelectorAll(".knob[data-mod]").forEach(k=>{
   const param=k.dataset.mod;
@@ -1238,7 +1375,24 @@ document.querySelectorAll(".knob[data-mod]").forEach(k=>{
 /* module power + dest */
 const filterPower=document.getElementById("filterPower"),
       lfoPower=document.getElementById("lfoPower"),
+      harmPower=document.getElementById("harmPower"),
+      crushPower=document.getElementById("crushPower"),
       lfoDestSel=document.getElementById("lfoDestSel");
+harmPower.addEventListener("click",()=>{
+  initAudio();
+  harmOn=!harmOn;
+  harmPower.classList.toggle("active",harmOn);
+  harmPower.setAttribute("aria-pressed",String(harmOn));
+  if(harmOn)playNote(quantizePitch(.5),.55); /* audition the stack */
+  queueSave();
+});
+crushPower.addEventListener("click",()=>{
+  initAudio();
+  crushOn=!crushOn;
+  crushPower.classList.toggle("active",crushOn);
+  crushPower.setAttribute("aria-pressed",String(crushOn));
+  applyModules();queueSave();
+});
 filterPower.addEventListener("click",()=>{
   initAudio();
   filterOn=!filterOn;
@@ -1319,6 +1473,8 @@ function applyTheme(dark){
   btnTheme.setAttribute("aria-pressed",dark);
   themeLbl.textContent=dark?"LIGHT":"DARK";
   pal=dark?PAL.dark:PAL.light;
+  const mt=document.getElementById("metaTheme");
+  if(mt)mt.content=dark?"#0e0e0e":"#b9b7b2";
 }
 const mq=window.matchMedia("(prefers-color-scheme: dark)");
 applyTheme(mq.matches);
@@ -1351,10 +1507,12 @@ document.querySelectorAll(".key[data-engine]").forEach(b=>{
 const screen=document.getElementById("screen"),cv=document.getElementById("cv"),ctx=cv.getContext("2d");
 const fCv=document.getElementById("filterCv"),fCtx=fCv.getContext("2d");
 const lCv=document.getElementById("lfoCv"),lCtx=lCv.getContext("2d");
+const hCv=document.getElementById("harmCv"),hCtx=hCv.getContext("2d");
+const cCv=document.getElementById("crushCv"),cCtx=cCv.getContext("2d");
 let W=0,H=0,DPR=1;
 const GX=96;let GY=44,CWc=0,CHc=0;
 let field=null,fieldB=null,hot=null,hotB=null;
-let fW=0,fH=0,lW=0,lH=0;
+let fW=0,fH=0,lW=0,lH=0,hW=0,hH=0,cW=0,cH2=0;
 
 function sizeCanvas(c,cx){
   const r=c.parentElement.getBoundingClientRect();
@@ -1375,6 +1533,8 @@ function resize(){
   hot=new Float32Array(GX*GY);hotB=new Float32Array(GX*GY);
   [fW,fH]=sizeCanvas(fCv,fCtx);
   [lW,lH]=sizeCanvas(lCv,lCtx);
+  [hW,hH]=sizeCanvas(hCv,hCtx);
+  [cW,cH2]=sizeCanvas(cCv,cCtx);
   alignSpeaker();
 }
 function alignSpeaker(){
@@ -1390,8 +1550,9 @@ window.addEventListener("resize",resize);resize();
 /* orbs */
 const orbs=[];
 function makeOrb(x,y){
+  const a=Math.random()*Math.PI*2;
   return {x:x??Math.random()*.8+.1,y:y??Math.random()*.8+.1,
-    vx:(Math.random()-.5)*.16,vy:(Math.random()-.5)*.16};
+    vx:Math.cos(a)*ORB_SPEED,vy:Math.sin(a)*ORB_SPEED};
 }
 function syncOrbs(){
   const n=orbCount();
@@ -1476,7 +1637,7 @@ screen.addEventListener("touchmove",ptrMoveH,{passive:false});
 screen.addEventListener("touchend",ptrUpH);
 
 /* ---------- module visualizations ---------- */
-let lfoPhase=0,lastFrameT=performance.now();
+let lastFrameT=performance.now();
 function drawFilterViz(){
   fCtx.clearRect(0,0,fW,fH);
   const cols=44,pad=4;
@@ -1497,7 +1658,7 @@ function drawFilterViz(){
       const y=fH-5-d*5;
       const top=d===dots-1;
       fCtx.fillStyle=(top?pal.modHi:pal.mod)+(top?alpha:alpha*.55)+")";
-      fCtx.fillRect(x-1.5,y-1.5,3,3);
+      dot(fCtx,x,y,1.6);
     }
   }
 }
@@ -1512,7 +1673,46 @@ function drawLfoViz(dt){
     const head=i===cols-1;
     const alpha=lfoOn?(.25+.6*i/cols):.22;
     lCtx.fillStyle=(head&&lfoOn?pal.modHi:pal.mod)+alpha+")";
-    lCtx.fillRect(x-1.5,y-1.5,3,3);
+    dot(lCtx,x,y,1.6);
+  }
+}
+
+function drawHarmViz(){
+  hCtx.clearRect(0,0,hW,hH);
+  const n=1+Math.round(PM.spread*2);
+  const gains=[1,.5*PM.blend,.35*PM.blend,.25*PM.blend];
+  const bars=harmOn?1+n:1;
+  const pulse=.9+Math.sin(lfoPhase*0+performance.now()/700)*.08;
+  for(let b=0;b<4;b++){
+    const active=b<bars;
+    const g=b===0?1:gains[b];
+    const x=hW*(.16+b*.23);
+    const hMax=hH-10;
+    const hgt=Math.max(3,(active?g:.12)*hMax*(b===0?1:pulse));
+    const dots=Math.max(1,Math.round(hgt/5));
+    const alpha=harmOn||b===0?(active?.85:.18):.18;
+    for(let d=0;d<dots;d++){
+      const y=hH-5-d*5;
+      const top=d===dots-1;
+      hCtx.fillStyle=(top?pal.modHi:pal.mod)+(top?alpha:alpha*.55)+")";
+      dot(hCtx,x,y,1.6);
+    }
+  }
+}
+let crushPhase=0;
+function drawCrushViz(dt){
+  cCtx.clearRect(0,0,cW,cH2);
+  crushPhase+=dt*1.1;
+  const cols=44,pad=4,mid=cH2/2,amp=cH2/2-7;
+  const L=Math.pow(2,crushBits()-1);
+  for(let i=0;i<cols;i++){
+    const x=pad+i/(cols-1)*(cW-pad*2);
+    let v=Math.sin(crushPhase+i*.32);
+    if(crushOn)v=(1-PM.mix)*v+PM.mix*(Math.round(v*L)/L);
+    const y=mid+v*amp;
+    const alpha=crushOn?.8:.22;
+    cCtx.fillStyle=pal.mod+alpha+")";
+    dot(cCtx,x,y,1.6);
   }
 }
 
@@ -1543,10 +1743,12 @@ function tick(){
         deposit(field,Math.floor(hx*GX),Math.floor(hy*GY),2.4,5);
       }
       deposit(field,Math.floor(o.x*GX),Math.floor(o.y*GY),.22,2.6);
+      /* wander changes direction only — speed is renormalized to a fixed
+         magnitude every frame so all orbs travel at the same rate and
+         finger-pushes steer rather than accelerate */
       o.vx+=(Math.random()-.5)*.004;o.vy+=(Math.random()-.5)*.004;
-      const sp=Math.hypot(o.vx,o.vy);
-      if(sp>.35){o.vx*=.35/sp;o.vy*=.35/sp;}
-      if(sp<.05){o.vx*=1.05;o.vy*=1.05;}
+      const sp=Math.hypot(o.vx,o.vy)||1e-6;
+      o.vx*=ORB_SPEED/sp;o.vy*=ORB_SPEED/sp;
     }
 
     for(let i=0;i<field.length;i++)field[i]+=hot[i]*.05;
@@ -1571,14 +1773,17 @@ function tick(){
   render();
   drawFilterViz();
   drawLfoViz(dt);
+  drawHarmViz();
+  drawCrushViz(dt);
   if(frame%3===0)updateVU();
   updateLeds();
 }
+function dot(c,x,y,r){c.beginPath();c.arc(x,y,r,0,6.2832);c.fill();}
 function render(){
   ctx.clearRect(0,0,W,H);
   ctx.fillStyle=pal.idle;
   for(let y=0;y<GY;y+=2)for(let x=0;x<GX;x+=2)
-    ctx.fillRect(x*CWc+CWc*.42,y*CHc+CHc*.42,1,1);
+    dot(ctx,x*CWc+CWc*.5,y*CHc+CHc*.5,.8);
   for(let y=0;y<GY;y++){
     for(let x=0;x<GX;x++){
       const i=y*GX+x,g=field[i],h=hot[i];
@@ -1591,7 +1796,7 @@ function render(){
         const a=Math.min(v,.95);
         ctx.fillStyle=v>.8?pal.dotHi(a):pal.dot(a);
       }
-      ctx.fillRect(cx-sz/2,cy-sz/2,sz,sz);
+      dot(ctx,cx,cy,sz/2);
     }
   }
   ctx.strokeStyle=pal.orb;ctx.lineWidth=1;
@@ -1631,8 +1836,8 @@ function saveState(){
   try{
     const data={
       p:{tone:rnd(P.tone,100),space:rnd(P.space,100),drift:rnd(P.drift,100),orbs:rnd(P.orbs,100),level:rnd(P.level,100)},
-      pm:{hp:rnd(PM.hp,100),lp:rnd(PM.lp,100),rate:rnd(PM.rate,100),depth:rnd(PM.depth,100)},
-      fo:filterOn?1:0,lo:lfoOn?1:0,ld:lfoDest,
+      pm:{hp:rnd(PM.hp,100),lp:rnd(PM.lp,100),rate:rnd(PM.rate,100),depth:rnd(PM.depth,100),blend:rnd(PM.blend,100),spread:rnd(PM.spread,100),bits:rnd(PM.bits,100),mix:rnd(PM.mix,100)},
+      fo:filterOn?1:0,lo:lfoOn?1:0,ld:lfoDest,ho:harmOn?1:0,co:crushOn?1:0,
       b:BPM,k:keyRoot,m:keyMode,o:octave,e:ENGINES.indexOf(engine),
       L:linkOn?1:0,ls:[...linked],
       th:themeOverride?(document.body.classList.contains("dark")?"d":"l"):null,
@@ -1659,11 +1864,13 @@ function loadState(){
   try{
     if(d.p)for(const k of ["tone","space","drift","orbs","level"])
       if(typeof d.p[k]==="number")P[k]=Math.min(1,Math.max(0,d.p[k]));
-    if(d.pm)for(const k of ["hp","lp","rate","depth"])
+    if(d.pm)for(const k of ["hp","lp","rate","depth","blend","spread","bits","mix"])
       if(typeof d.pm[k]==="number")PM[k]=Math.min(1,Math.max(0,d.pm[k]));
     if(typeof d.fo==="number"){filterOn=!!d.fo;filterPower.classList.toggle("active",filterOn);filterPower.setAttribute("aria-pressed",String(filterOn));}
     if(typeof d.lo==="number"){lfoOn=!!d.lo;lfoPower.classList.toggle("active",lfoOn);lfoPower.setAttribute("aria-pressed",String(lfoOn));}
-    if(d.ld==="filter"||d.ld==="level"){lfoDest=d.ld;lfoDestSel.value=lfoDest;}
+    if(["filter","level","crush","harmonic"].includes(d.ld)){lfoDest=d.ld;lfoDestSel.value=lfoDest;}
+    if(typeof d.ho==="number"){harmOn=!!d.ho;harmPower.classList.toggle("active",harmOn);harmPower.setAttribute("aria-pressed",String(harmOn));}
+    if(typeof d.co==="number"){crushOn=!!d.co;crushPower.classList.toggle("active",crushOn);crushPower.setAttribute("aria-pressed",String(crushOn));}
     Object.values(knobAPI).forEach(a=>a.render());
     syncOrbs();
     if(d.b)setBPM(d.b);
