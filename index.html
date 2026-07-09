@@ -89,7 +89,7 @@ body.dark{
 }
 .mono{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace}
 
-.rig{width:min(580px,100%);margin:auto}
+.rig{width:min(952px,100%);margin:auto}
 button,select,input{touch-action:manipulation}
 
 /* ============ CHASSIS (shared by device + modules) ============ */
@@ -121,24 +121,34 @@ button,select,input{touch-action:manipulation}
 }
 body.dark .device::after,body.dark .module::after{opacity:.22}
 
-/* ============ ATTACHED MODULES ============ */
-.module-row{
-  display:grid;grid-template-columns:1fr 1fr;gap:12px;
-  margin-top:18px;
+/* ============ SIDE-MOUNTED MODULES (flush) ============ */
+.rack{
+  display:grid;grid-template-columns:186px minmax(0,1fr) 186px;
+  align-items:stretch;gap:26px;
 }
-.module{border-radius:16px;padding:10px}
-.module::before{border-radius:12px}
-.module::after{border-radius:16px}
-/* connector tabs bridging to the main device */
-.module .tab{
-  position:absolute;top:-19px;width:22px;height:20px;
-  background:linear-gradient(180deg,var(--body-lo),var(--body));
-  border:1px solid var(--edge);border-bottom:none;
-  border-radius:5px 5px 0 0;
-  box-shadow:inset 0 1px 0 var(--rim);
+.side{display:flex;flex-direction:column;gap:16px}
+.side .module{flex:1;display:flex;flex-direction:column;position:relative}
+.device{z-index:2}
+.module{
+  border-radius:16px;padding:10px;
+  box-shadow:
+    0 2px 0 var(--rim) inset,
+    0 -2px 3px rgba(0,0,0,.08) inset,
+    0 22px 44px -16px var(--shadow-strong),
+    0 8px 18px -8px var(--shadow-soft);
 }
-.module .tab.l{left:22%}
-.module .tab.r{right:22%}
+.module::before,.module::after{border-radius:inherit}
+
+/* connector tabs bridging each module to the main device */
+.side .module .tab{
+  position:absolute;top:50%;width:20px;height:24px;transform:translateY(-50%);
+  background:linear-gradient(180deg,var(--body-hi),var(--body-lo));
+  border:1px solid var(--edge);
+  box-shadow:inset 0 1px 0 var(--rim), 0 1px 3px rgba(0,0,0,.15);
+  z-index:1;
+}
+.side.left .module .tab{right:-21px;border-radius:0 4px 4px 0;border-left:none}
+.side.right .module .tab{left:-21px;border-radius:4px 0 0 4px;border-right:none}
 .mod-head{
   display:flex;align-items:center;justify-content:space-between;gap:6px;
   margin-bottom:8px;padding:0 2px;
@@ -151,10 +161,11 @@ body.dark .device::after,body.dark .module::after{opacity:.22}
   padding:5px;
   box-shadow:inset 0 2px 5px rgba(0,0,0,.85), inset 0 -1px 1px rgba(255,255,255,.06), 0 1px 0 var(--rim);
   margin-bottom:10px;
+  flex:1;display:flex;min-height:0;
 }
 body.dark .mod-screen{background:linear-gradient(180deg,#101010,#000)}
 .mod-screen .inner{
-  position:relative;width:100%;height:56px;border-radius:4px;overflow:hidden;
+  position:relative;width:100%;flex:1;min-height:44px;border-radius:4px;overflow:hidden;
   background:var(--screen);
   box-shadow:inset 0 0 14px rgba(0,0,0,.9);
 }
@@ -519,6 +530,13 @@ body.dark .byline{color:#6a6a6a}
 body.dark .byline a{color:#6a6a6a;border-color:rgba(106,106,106,.4)}
 body.dark .byline a:hover,body.dark .byline a:focus-visible{color:var(--ink);border-color:var(--ink)}
 
+@media (max-width:940px){
+  .rack{display:block}
+  .side{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .side.left{margin:14px 0 0}
+  .side.right{margin:12px 0 0}
+  .side .module .tab{display:none}
+}
 @media (max-width:520px){
   body{padding:12px}
   .device{padding:10px;border-radius:18px}
@@ -541,7 +559,7 @@ body.dark .byline a:hover,body.dark .byline a:focus-visible{color:var(--ink);bor
   .engine-bank{grid-template-columns:repeat(5,1fr);gap:5px}
   .transport{padding:10px 8px 22px}
   .tkey{max-width:48px}
-  .module-row{grid-template-columns:1fr;gap:28px;margin-top:20px}
+  .side{grid-template-columns:1fr;gap:14px}
   .module .knob{width:48px;height:48px}
   .rig-brand{margin-bottom:26px}
 }
@@ -554,6 +572,56 @@ body.dark .byline a:hover,body.dark .byline a:focus-visible{color:var(--ink);bor
 
 <div class="rig">
 <div class="rig-brand">OP / FLUID</div>
+<div class="rack">
+<div class="side left">
+<div class="module" id="filterModule">
+    <span class="tab"></span>
+    <div class="mod-head">
+      <span class="mod-title">FILTER</span>
+      <button class="pill mod-power active" id="filterPower" aria-pressed="true"><span class="led"></span>ON</button>
+    </div>
+    <div class="mod-screen"><div class="inner"><canvas id="filterCv"></canvas></div></div>
+    <div class="mod-knobs">
+      <div class="knob-cell">
+        <span class="lbl">HIGH PASS</span>
+        <div class="knob" data-color="mgrey1" data-mod="hp" role="slider" aria-label="high pass cutoff" aria-valuemin="0" aria-valuemax="100" tabindex="0"><div class="cap"></div><div class="rot"><div class="dot"></div></div></div>
+        <span class="val mono"></span>
+      </div>
+      <div class="knob-cell">
+        <span class="lbl">LOW PASS</span>
+        <div class="knob" data-color="mgrey2" data-mod="lp" role="slider" aria-label="low pass cutoff" aria-valuemin="0" aria-valuemax="100" tabindex="0"><div class="cap"></div><div class="rot"><div class="dot"></div></div></div>
+        <span class="val mono"></span>
+      </div>
+    </div>
+  </div>
+<div class="module" id="lfoModule">
+    <span class="tab"></span>
+    <div class="mod-head">
+      <span class="mod-title">LFO</span>
+      <select class="readout tiny" id="lfoDestSel" aria-label="lfo destination">
+        <option value="filter">FILTER</option>
+        <option value="level">LEVEL</option>
+        <option value="crush">CRUSH</option>
+        <option value="harmonic">HARMONIC</option>
+      </select>
+      <button class="pill mod-power" id="lfoPower" aria-pressed="false"><span class="led"></span>ON</button>
+    </div>
+    <div class="mod-screen"><div class="inner"><canvas id="lfoCv"></canvas></div></div>
+    <div class="mod-knobs">
+      <div class="knob-cell">
+        <span class="lbl">RATE</span>
+        <div class="knob" data-color="mgrey1" data-mod="rate" role="slider" aria-label="lfo rate" aria-valuemin="0" aria-valuemax="100" tabindex="0"><div class="cap"></div><div class="rot"><div class="dot"></div></div></div>
+        <span class="val mono"></span>
+      </div>
+      <div class="knob-cell">
+        <span class="lbl">DEPTH</span>
+        <div class="knob" data-color="mgrey2" data-mod="depth" role="slider" aria-label="lfo depth" aria-valuemin="0" aria-valuemax="100" tabindex="0"><div class="cap"></div><div class="rot"><div class="dot"></div></div></div>
+        <span class="val mono"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="device">
 
   <!-- top: speaker / screen / vu -->
@@ -690,58 +758,9 @@ body.dark .byline a:hover,body.dark .byline a:focus-visible{color:var(--ink);bor
 
 </div>
 
-<!-- attached modules -->
-<div class="module-row">
-  <div class="module" id="filterModule">
-    <span class="tab l"></span><span class="tab r"></span>
-    <div class="mod-head">
-      <span class="mod-title">FILTER</span>
-      <button class="pill mod-power active" id="filterPower" aria-pressed="true"><span class="led"></span>ON</button>
-    </div>
-    <div class="mod-screen"><div class="inner"><canvas id="filterCv"></canvas></div></div>
-    <div class="mod-knobs">
-      <div class="knob-cell">
-        <span class="lbl">HIGH PASS</span>
-        <div class="knob" data-color="mgrey1" data-mod="hp" role="slider" aria-label="high pass cutoff" aria-valuemin="0" aria-valuemax="100" tabindex="0"><div class="cap"></div><div class="rot"><div class="dot"></div></div></div>
-        <span class="val mono"></span>
-      </div>
-      <div class="knob-cell">
-        <span class="lbl">LOW PASS</span>
-        <div class="knob" data-color="mgrey2" data-mod="lp" role="slider" aria-label="low pass cutoff" aria-valuemin="0" aria-valuemax="100" tabindex="0"><div class="cap"></div><div class="rot"><div class="dot"></div></div></div>
-        <span class="val mono"></span>
-      </div>
-    </div>
-  </div>
-
-  <div class="module" id="lfoModule">
-    <span class="tab l"></span><span class="tab r"></span>
-    <div class="mod-head">
-      <span class="mod-title">LFO</span>
-      <select class="readout tiny" id="lfoDestSel" aria-label="lfo destination">
-        <option value="filter">FILTER</option>
-        <option value="level">LEVEL</option>
-        <option value="crush">CRUSH</option>
-        <option value="harmonic">HARMONIC</option>
-      </select>
-      <button class="pill mod-power" id="lfoPower" aria-pressed="false"><span class="led"></span>ON</button>
-    </div>
-    <div class="mod-screen"><div class="inner"><canvas id="lfoCv"></canvas></div></div>
-    <div class="mod-knobs">
-      <div class="knob-cell">
-        <span class="lbl">RATE</span>
-        <div class="knob" data-color="mgrey1" data-mod="rate" role="slider" aria-label="lfo rate" aria-valuemin="0" aria-valuemax="100" tabindex="0"><div class="cap"></div><div class="rot"><div class="dot"></div></div></div>
-        <span class="val mono"></span>
-      </div>
-      <div class="knob-cell">
-        <span class="lbl">DEPTH</span>
-        <div class="knob" data-color="mgrey2" data-mod="depth" role="slider" aria-label="lfo depth" aria-valuemin="0" aria-valuemax="100" tabindex="0"><div class="cap"></div><div class="rot"><div class="dot"></div></div></div>
-        <span class="val mono"></span>
-      </div>
-    </div>
-  </div>
-
-  <div class="module" id="harmModule">
-    <span class="tab l"></span><span class="tab r"></span>
+<div class="side right">
+<div class="module" id="harmModule">
+    <span class="tab"></span>
     <div class="mod-head">
       <span class="mod-title">HARMONIC</span>
       <button class="pill mod-power" id="harmPower" aria-pressed="false"><span class="led"></span>ON</button>
@@ -760,9 +779,8 @@ body.dark .byline a:hover,body.dark .byline a:focus-visible{color:var(--ink);bor
       </div>
     </div>
   </div>
-
-  <div class="module" id="crushModule">
-    <span class="tab l"></span><span class="tab r"></span>
+<div class="module" id="crushModule">
+    <span class="tab"></span>
     <div class="mod-head">
       <span class="mod-title">CRUSH</span>
       <button class="pill mod-power" id="crushPower" aria-pressed="false"><span class="led"></span>ON</button>
@@ -782,6 +800,8 @@ body.dark .byline a:hover,body.dark .byline a:focus-visible{color:var(--ink);bor
     </div>
   </div>
 </div>
+</div><!-- /rack -->
+
 
 <div class="under-hint mono">TOUCH THE DISPLAY · WALLS SING · REC CAPTURES 8 BARS</div>
 <div class="byline mono">BY <a href="https://cortes.us" target="_blank" rel="noopener">DENNIS CORTES</a></div>
@@ -1139,10 +1159,19 @@ function schedulePlayback(){
    EXPORT — standard MIDI file + offline-rendered WAV
 ================================================================ */
 function download(blob,name){
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);a.download=name;
-  document.body.appendChild(a);a.click();
-  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},2000);
+  try{
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url;a.download=name;a.rel="noopener";
+    document.body.appendChild(a);
+    if(typeof a.download==="undefined"){window.open(url,"_blank");} /* very old browsers */
+    else a.click();
+    setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},4000);
+    return true;
+  }catch(_){
+    flashStatus("SAVE BLOCKED",2200); /* sandboxed preview frames block downloads */
+    return false;
+  }
 }
 /* variable-length quantity */
 function vlq(n){
@@ -1191,8 +1220,8 @@ function exportMIDI(){
   ];
   const u8=new Uint8Array(head.length+trackLen);
   u8.set(head,0);u8.set(bytes,head.length);
-  download(new Blob([u8],{type:"audio/midi"}),"op-fluid-loop.mid");
-  flashStatus("MIDI SAVED");
+  if(download(new Blob([u8],{type:"audio/midi"}),"op-fluid-loop.mid"))
+    flashStatus("MIDI SAVED · "+events.length+" EV");
 }
 btnMidi.addEventListener("click",exportMIDI);
 
@@ -1229,8 +1258,8 @@ async function exportWAV(){
       a=Math.max(-1,Math.min(1,R[i]));
       data.setInt16(o,a<0?a*0x8000:a*0x7FFF,true);o+=2;
     }
-    download(new Blob([data.buffer],{type:"audio/wav"}),"op-fluid-loop.wav");
-    flashStatus("WAV SAVED");
+    if(download(new Blob([data.buffer],{type:"audio/wav"}),"op-fluid-loop.wav"))
+      flashStatus("WAV SAVED");
   }catch(e){
     flashStatus("EXPORT FAILED");
   }
