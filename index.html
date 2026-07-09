@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>OP-FLUID</title>
+<title>OP / FLUID</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0d0b'/%3E%3Cg fill='%233ce08f'%3E%3Crect x='29' y='29' width='6' height='6'/%3E%3Crect x='21' y='29' width='4' height='4' opacity='.7'/%3E%3Crect x='39' y='29' width='4' height='4' opacity='.7'/%3E%3Crect x='29' y='21' width='4' height='4' opacity='.7'/%3E%3Crect x='29' y='39' width='4' height='4' opacity='.7'/%3E%3Crect x='15' y='29' width='3' height='3' opacity='.4'/%3E%3Crect x='46' y='29' width='3' height='3' opacity='.4'/%3E%3Crect x='29' y='15' width='3' height='3' opacity='.4'/%3E%3Crect x='29' y='46' width='3' height='3' opacity='.4'/%3E%3Crect x='21' y='21' width='3' height='3' opacity='.5'/%3E%3Crect x='40' y='21' width='3' height='3' opacity='.5'/%3E%3Crect x='21' y='40' width='3' height='3' opacity='.5'/%3E%3Crect x='40' y='40' width='3' height='3' opacity='.5'/%3E%3C/g%3E%3C/svg%3E">
 <style>
 :root{
@@ -365,6 +365,17 @@ body.dark .linkdot.on{background:#f2f2f2;box-shadow:0 0 5px rgba(242,242,242,.6)
 }
 .pill.active .led{background:#3ce08f;box-shadow:0 0 6px rgba(60,224,143,.9)}
 body.dark .pill.active .led{background:#f2f2f2;box-shadow:0 0 6px rgba(242,242,242,.8)}
+.pill.blink .led{animation:ledBlink 1s steps(1) infinite}
+@keyframes ledBlink{
+  0%,100%{background:#3ce08f;box-shadow:0 0 6px rgba(60,224,143,.9)}
+  50%{background:var(--led-off);box-shadow:inset 0 1px 1px rgba(0,0,0,.25)}
+}
+body.dark .pill.blink .led{animation:ledBlinkD 1s steps(1) infinite}
+@keyframes ledBlinkD{
+  0%,100%{background:#f2f2f2;box-shadow:0 0 6px rgba(242,242,242,.8)}
+  50%{background:var(--led-off);box-shadow:inset 0 1px 1px rgba(0,0,0,.25)}
+}
+@media (prefers-reduced-motion:reduce){.pill.blink .led{animation:none;background:#3ce08f}}
 
 .stepper{display:flex;align-items:center;gap:8px}
 .stepper .slbl{font-size:9px;letter-spacing:.18em;color:var(--ink-soft);text-transform:uppercase}
@@ -407,7 +418,7 @@ select.readout:focus-visible{box-shadow:inset 0 1px 4px rgba(0,0,0,.8), 0 0 0 2p
 .readout.small{min-width:44px}
 
 /* ============ ENGINES + TRANSPORT ============ */
-.bottom-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:stretch}
+.bottom-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:stretch}
 
 .engine-bank{
   display:grid;grid-template-columns:repeat(5,1fr);gap:7px;
@@ -424,8 +435,9 @@ select.readout:focus-visible{box-shadow:inset 0 1px 4px rgba(0,0,0,.8), 0 0 0 2p
     0 1px 1px rgba(0,0,0,.18),
     inset 0 1px 1px var(--rim),
     inset 0 -2px 2px rgba(0,0,0,.06);
-  padding:16px 2px 10px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  padding:14px 2px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+
   cursor:pointer;
   font-family:inherit;
   transition:transform .06s, box-shadow .06s;
@@ -436,7 +448,7 @@ select.readout:focus-visible{box-shadow:inset 0 1px 4px rgba(0,0,0,.8), 0 0 0 2p
 .key:focus-visible{outline:2px solid var(--ink-soft);outline-offset:2px}
 .key .glyph{width:22px;height:22px;display:block}
 .key .glyph *{stroke:var(--glyph);fill:none;stroke-width:1.6;stroke-linecap:round}
-.key .lbl{font-size:8.5px;letter-spacing:.16em;color:var(--ink-soft);text-transform:uppercase}
+.key .lbl{display:none}
 .key .led{
   position:absolute;top:6px;left:50%;transform:translateX(-50%);
   width:6px;height:6px;border-radius:50%;
@@ -447,14 +459,15 @@ select.readout:focus-visible{box-shadow:inset 0 1px 4px rgba(0,0,0,.8), 0 0 0 2p
 body.dark .key.active .led{background:#f2f2f2;box-shadow:0 0 6px rgba(242,242,242,.8)}
 
 .transport{
-  display:grid;grid-template-columns:repeat(5,46px);gap:8px;
+  display:grid;grid-template-columns:repeat(5,1fr);gap:6px;
   background:linear-gradient(180deg,var(--panel-hi),var(--panel-lo));
-  border-radius:14px;padding:10px 10px 24px;
+  border-radius:14px;padding:10px 8px 24px;
   box-shadow:inset 0 1px 2px rgba(0,0,0,.10), inset 0 -1px 1px var(--rim);
 }
 .tkey{
   border:none;outline:none;border-radius:50%;
-  aspect-ratio:1;align-self:center;
+  aspect-ratio:1;align-self:center;justify-self:center;
+  width:100%;max-width:44px;
   background:radial-gradient(circle at 35% 28%, var(--key-hi), var(--key) 60%, var(--key-mid) 100%);
   box-shadow:
     0 4px 7px var(--shadow-soft),
@@ -478,28 +491,35 @@ body.dark .key.active .led{background:#f2f2f2;box-shadow:0 0 6px rgba(242,242,24
 body.dark .tkey.play.on svg path{fill:#fff;stroke:#fff}
 .tkey.busy{opacity:.5;pointer-events:none}
 
-.footer{
-  display:flex;justify-content:center;align-items:center;
-  margin-top:12px;padding:0 6px;
+.rig-brand{
+  text-align:center;
+  margin-bottom:14px;
+  font-size:12px;letter-spacing:.28em;color:var(--ink);font-weight:600;text-transform:uppercase;
 }
-.footer .brand{font-size:11px;letter-spacing:.14em;color:var(--ink);font-weight:600;text-transform:uppercase}
 
 .under-hint{
   text-align:center;
-  margin-top:16px;
+  margin-top:40px;
   font-size:9.5px;color:#8f8d88;letter-spacing:.08em;text-transform:uppercase;
   font-family:ui-monospace,"SF Mono",Menlo,monospace;
 }
 body.dark .under-hint{color:#6a6a6a}
+.byline{
+  text-align:center;margin-top:8px;
+  font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+  font-family:ui-monospace,"SF Mono",Menlo,monospace;
+}
+.byline a{color:#8f8d88;text-decoration:none;border-bottom:1px solid rgba(143,141,136,.35);padding-bottom:1px;transition:color .15s,border-color .15s}
+.byline a:hover,.byline a:focus-visible{color:var(--ink);border-color:var(--ink);outline:none}
+body.dark .byline a{color:#6a6a6a;border-color:rgba(106,106,106,.4)}
+body.dark .byline a:hover,body.dark .byline a:focus-visible{color:var(--ink);border-color:var(--ink)}
 
 @media (max-width:520px){
   .top-row{grid-template-columns:56px 1fr 48px}
   .knob{width:46px;height:46px}
-  .transport{grid-template-columns:repeat(5,38px)}
   .footer .hint{display:none}
   .screen{aspect-ratio:16/9}
   .engine-bank{grid-template-columns:repeat(5,1fr);gap:5px}
-  .key .lbl{font-size:7.5px;letter-spacing:.1em}
   .module-row{grid-template-columns:1fr;gap:26px}
 }
 @media (prefers-reduced-motion:reduce){
@@ -510,6 +530,7 @@ body.dark .under-hint{color:#6a6a6a}
 <body>
 
 <div class="rig">
+<div class="rig-brand">OP / FLUID</div>
 <div class="device">
 
   <!-- top: speaker / screen / vu -->
@@ -613,30 +634,25 @@ body.dark .under-hint{color:#6a6a6a}
   <!-- engines + transport -->
   <div class="bottom-row">
     <div class="engine-bank" role="radiogroup" aria-label="sound engine">
-      <button class="key active" data-engine="crystal" aria-pressed="true">
+      <button class="key active" data-engine="crystal" aria-pressed="true" aria-label="crystal engine">
         <span class="led"></span>
         <svg class="glyph" viewBox="0 0 22 22"><path d="M11 2 L19 11 L11 20 L3 11 Z M11 2 V20 M3 11 H19"/></svg>
-        <span class="lbl">CRYSTAL</span>
       </button>
-      <button class="key" data-engine="tape" aria-pressed="false">
+      <button class="key" data-engine="tape" aria-pressed="false" aria-label="tape engine">
         <span class="led"></span>
         <svg class="glyph" viewBox="0 0 22 22"><circle cx="7" cy="11" r="4"/><circle cx="15" cy="11" r="4"/><path d="M7 15 H15"/></svg>
-        <span class="lbl">TAPE</span>
       </button>
-      <button class="key" data-engine="bloom" aria-pressed="false">
+      <button class="key" data-engine="bloom" aria-pressed="false" aria-label="bloom engine">
         <span class="led"></span>
         <svg class="glyph" viewBox="0 0 22 22"><circle cx="11" cy="11" r="3"/><circle cx="11" cy="11" r="7"/><path d="M11 1 V4 M11 18 V21 M1 11 H4 M18 11 H21"/></svg>
-        <span class="lbl">BLOOM</span>
       </button>
-      <button class="key" data-engine="pluck" aria-pressed="false">
+      <button class="key" data-engine="pluck" aria-pressed="false" aria-label="pluck engine">
         <span class="led"></span>
         <svg class="glyph" viewBox="0 0 22 22"><path d="M3 16 Q8 4 11 11 T19 6"/><path d="M3 19 H19"/></svg>
-        <span class="lbl">PLUCK</span>
       </button>
-      <button class="key" data-engine="fm" aria-pressed="false">
+      <button class="key" data-engine="fm" aria-pressed="false" aria-label="fm engine">
         <span class="led"></span>
         <svg class="glyph" viewBox="0 0 22 22"><path d="M2 11 Q6 3 11 11 T20 11"/><path d="M2 15 Q6 11 11 15 T20 15"/></svg>
-        <span class="lbl">FM</span>
       </button>
     </div>
 
@@ -649,9 +665,6 @@ body.dark .under-hint{color:#6a6a6a}
     </div>
   </div>
 
-  <div class="footer">
-    <span class="brand">OP-FLUID</span>
-  </div>
 </div>
 
 <!-- attached modules -->
@@ -704,6 +717,7 @@ body.dark .under-hint{color:#6a6a6a}
 </div>
 
 <div class="under-hint mono">TOUCH THE DISPLAY · WALLS SING · REC CAPTURES 8 BARS</div>
+<div class="byline mono">BY <a href="https://cortes.us" target="_blank" rel="noopener">DENNIS CORTES</a></div>
 </div>
 
 <script>
@@ -1269,6 +1283,7 @@ function setMotion(running){
   paused=!running;
   motionLbl.textContent=running?"PAUSE":"PLAY";
   btnMotion.classList.toggle("active",running);
+  btnMotion.classList.toggle("blink",!running); /* blinking LED = paused feedback */
   btnMotion.setAttribute("aria-pressed",String(running));
 }
 btnMotion.addEventListener("click",()=>setMotion(paused));
