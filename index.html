@@ -89,11 +89,11 @@ body.dark{
 }
 .mono{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace}
 
-.rig{width:min(952px,100%);margin:auto}
+.rig{width:min(920px,100%);margin:auto}
 button,select,input{touch-action:manipulation}
 
-/* ============ CHASSIS (shared by device + modules) ============ */
-.device,.module{
+/* ============ SINGLE CHASSIS ============ */
+.device{
   background:linear-gradient(180deg,var(--body-hi) 0%,var(--body) 45%,var(--body-lo) 100%);
   border-radius:22px;
   padding:14px;
@@ -106,49 +106,36 @@ button,select,input{touch-action:manipulation}
   border:1px solid var(--edge);
   transition:background .3s;
 }
-.device::before,.module::before{
+.device::before{
   content:"";position:absolute;inset:4px;border-radius:18px;pointer-events:none;
   border:1.5px solid var(--rim);
   box-shadow:0 0 0 1px rgba(0,0,0,.06);
   z-index:6;
 }
-/* film grain — pointer-events:none keeps everything interactive */
-.device::after,.module::after{
+/* film grain over the entire instrument — pointer-events:none keeps it interactive */
+.device::after{
   content:"";position:absolute;inset:0;border-radius:22px;pointer-events:none;z-index:7;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   opacity:.14;
   mix-blend-mode:overlay;
 }
-body.dark .device::after,body.dark .module::after{opacity:.22}
+body.dark .device::after{opacity:.22}
 
-/* ============ SIDE-MOUNTED MODULES (flush) ============ */
+/* ============ INTERNAL PANEL LAYOUT (all one chassis) ============ */
 .rack{
-  display:grid;grid-template-columns:186px minmax(0,1fr) 186px;
-  align-items:stretch;gap:26px;
+  display:grid;grid-template-columns:172px minmax(0,1fr) 172px;
+  align-items:stretch;gap:12px;
 }
-.side{display:flex;flex-direction:column;gap:16px}
+.side{display:flex;flex-direction:column;gap:12px}
 .side .module{flex:1;display:flex;flex-direction:column;position:relative}
-.device{z-index:2}
+/* modules are now recessed panels milled into the faceplate, not separate boxes */
 .module{
-  border-radius:16px;padding:10px;
-  box-shadow:
-    0 2px 0 var(--rim) inset,
-    0 -2px 3px rgba(0,0,0,.08) inset,
-    0 22px 44px -16px var(--shadow-strong),
-    0 8px 18px -8px var(--shadow-soft);
+  border-radius:12px;padding:10px;
+  background:linear-gradient(180deg,var(--panel-lo),var(--panel-hi));
+  box-shadow:inset 0 2px 4px rgba(0,0,0,.16), inset 0 -1px 1px var(--rim), 0 1px 0 var(--rim);
 }
-.module::before,.module::after{border-radius:inherit}
-
-/* connector tabs bridging each module to the main device */
-.side .module .tab{
-  position:absolute;top:50%;width:20px;height:24px;transform:translateY(-50%);
-  background:linear-gradient(180deg,var(--body-hi),var(--body-lo));
-  border:1px solid var(--edge);
-  box-shadow:inset 0 1px 0 var(--rim), 0 1px 3px rgba(0,0,0,.15);
-  z-index:1;
-}
-.side.left .module .tab{right:-21px;border-radius:0 4px 4px 0;border-left:none}
-.side.right .module .tab{left:-21px;border-radius:4px 0 0 4px;border-right:none}
+.main-col{display:flex;flex-direction:column}
+.side .module .tab{display:none}
 .mod-head{
   display:flex;align-items:center;justify-content:space-between;gap:6px;
   margin-bottom:8px;padding:0 2px;
@@ -178,7 +165,7 @@ body.dark .mod-screen{background:linear-gradient(180deg,#101010,#000)}
 .mod-knobs{
   display:grid;grid-template-columns:1fr 1fr;gap:6px;
   background:linear-gradient(180deg,var(--panel-hi),var(--panel-lo));
-  border-radius:12px;padding:8px 6px;
+  border-radius:8px;padding:8px 6px;
   box-shadow:inset 0 1px 2px rgba(0,0,0,.10), inset 0 -1px 1px var(--rim);
 }
 .module .knob{width:44px;height:44px}
@@ -192,6 +179,7 @@ body.dark .mod-screen{background:linear-gradient(180deg,#101010,#000)}
 body.dark .module .knob[data-color="mgrey1"] .cap{background:radial-gradient(circle at 35% 30%, #cfcfcf, #ababab 70%)}
 body.dark .module .knob[data-color="mgrey2"] .cap{background:radial-gradient(circle at 35% 30%, #6e6e6e, #4e4e4e 70%)}
 select.readout.tiny{font-size:10px;padding:4px 22px 4px 6px;background-position:right 7px center}
+.lfo-dest{width:100%;text-align:left;margin-bottom:10px;background-position:right 9px center}
 
 /* ============ TOP ROW ============ */
 .top-row{display:grid;grid-template-columns:86px 1fr 64px;gap:12px;align-items:stretch;margin-bottom:12px}
@@ -507,9 +495,9 @@ body.dark .tkey.play.on svg path{fill:#fff;stroke:#fff}
 .rig-brand{
   text-align:center;
   margin-bottom:38px;
-  font-size:12px;letter-spacing:.28em;color:#1a1a18;font-weight:600;text-transform:uppercase;
+  font-size:12px;letter-spacing:.28em;color:#8f8d88;font-weight:600;text-transform:uppercase;
 }
-body.dark .rig-brand{color:#f5f5f5}
+body.dark .rig-brand{color:#6a6a6a}
 
 .under-hint{
   text-align:center;
@@ -533,9 +521,8 @@ body.dark .byline a:hover,body.dark .byline a:focus-visible{color:var(--ink);bor
 @media (max-width:940px){
   .rack{display:block}
   .side{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .side.left{margin:14px 0 0}
+  .side.left{margin:12px 0 0}
   .side.right{margin:12px 0 0}
-  .side .module .tab{display:none}
 }
 @media (max-width:520px){
   body{padding:12px}
@@ -572,10 +559,10 @@ body.dark .byline a:hover,body.dark .byline a:focus-visible{color:var(--ink);bor
 
 <div class="rig">
 <div class="rig-brand">OP / FLUID</div>
+<div class="device">
 <div class="rack">
 <div class="side left">
 <div class="module" id="filterModule">
-    <span class="tab"></span>
     <div class="mod-head">
       <span class="mod-title">FILTER</span>
       <button class="pill mod-power active" id="filterPower" aria-pressed="true"><span class="led"></span>ON</button>
@@ -595,18 +582,17 @@ body.dark .byline a:hover,body.dark .byline a:focus-visible{color:var(--ink);bor
     </div>
   </div>
 <div class="module" id="lfoModule">
-    <span class="tab"></span>
     <div class="mod-head">
       <span class="mod-title">LFO</span>
-      <select class="readout tiny" id="lfoDestSel" aria-label="lfo destination">
-        <option value="filter">FILTER</option>
-        <option value="level">LEVEL</option>
-        <option value="crush">CRUSH</option>
-        <option value="harmonic">HARMONIC</option>
-      </select>
       <button class="pill mod-power" id="lfoPower" aria-pressed="false"><span class="led"></span>ON</button>
     </div>
     <div class="mod-screen"><div class="inner"><canvas id="lfoCv"></canvas></div></div>
+    <select class="readout tiny lfo-dest" id="lfoDestSel" aria-label="lfo destination">
+      <option value="filter">FILTER</option>
+      <option value="level">LEVEL</option>
+      <option value="crush">CRUSH</option>
+      <option value="harmonic">HARMONIC</option>
+    </select>
     <div class="mod-knobs">
       <div class="knob-cell">
         <span class="lbl">RATE</span>
@@ -622,8 +608,7 @@ body.dark .byline a:hover,body.dark .byline a:focus-visible{color:var(--ink);bor
   </div>
 </div>
 
-<div class="device">
-
+<div class="main-col">
   <!-- top: speaker / screen / vu -->
   <div class="top-row">
     <div class="speaker" id="speaker"><div class="holes" id="holes"></div></div>
@@ -755,12 +740,10 @@ body.dark .byline a:hover,body.dark .byline a:focus-visible{color:var(--ink);bor
       <button class="tkey" id="btnWav" aria-label="export audio file"><svg viewBox="0 0 16 16"><path d="M8 2 V9 M5 6.5 L8 9.5 L11 6.5" fill="none" stroke-width="1.6"/><path d="M2.5 12.5 H13.5" fill="none" stroke-width="1.6"/></svg><span class="lbl">WAV</span></button>
     </div>
   </div>
-
 </div>
 
 <div class="side right">
 <div class="module" id="harmModule">
-    <span class="tab"></span>
     <div class="mod-head">
       <span class="mod-title">HARMONIC</span>
       <button class="pill mod-power" id="harmPower" aria-pressed="false"><span class="led"></span>ON</button>
@@ -780,7 +763,6 @@ body.dark .byline a:hover,body.dark .byline a:focus-visible{color:var(--ink);bor
     </div>
   </div>
 <div class="module" id="crushModule">
-    <span class="tab"></span>
     <div class="mod-head">
       <span class="mod-title">CRUSH</span>
       <button class="pill mod-power" id="crushPower" aria-pressed="false"><span class="led"></span>ON</button>
@@ -801,6 +783,8 @@ body.dark .byline a:hover,body.dark .byline a:focus-visible{color:var(--ink);bor
   </div>
 </div>
 </div><!-- /rack -->
+</div><!-- /device -->
+<!-- /rack -->
 
 
 <div class="under-hint mono">TOUCH THE DISPLAY · WALLS SING · REC CAPTURES 8 BARS</div>
